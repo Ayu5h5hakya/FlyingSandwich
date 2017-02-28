@@ -40,7 +40,7 @@ public class MusicDirectoryEngine {
         };
         Cursor cursor = mContentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                                projections,
-                               null,
+                               MediaStore.Audio.Media.DATA + " like ? ",
                                new String[]{"%"+MUSIC_DIRECTORY+"%"},
                                null);
         while (cursor.moveToNext()){

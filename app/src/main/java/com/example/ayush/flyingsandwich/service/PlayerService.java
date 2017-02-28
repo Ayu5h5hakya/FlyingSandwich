@@ -13,7 +13,7 @@ import java.io.IOException;
  * Created by Ayush on 2/28/2017.
  */
 
-public class PlayerService extends Service {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener{
 
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
@@ -23,6 +23,7 @@ public class PlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setOnPreparedListener(this);
     }
 
     @Nullable
@@ -44,15 +45,22 @@ public class PlayerService extends Service {
     public void setSelection(String selected_song,String selected_artist){
         this.selected_song=selected_song;
         this.selected_artist=selected_artist;
+        playCurrentSelection();
     }
 
-    public void playCurrentSelection(){
+
+    private void playCurrentSelection(){
+        if (mMediaPlayer.isPlaying()){
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+        }
         try {
             mMediaPlayer.setDataSource(selected_song);
             mMediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public String getSelected_song() {
@@ -61,6 +69,11 @@ public class PlayerService extends Service {
 
     public String getSelected_artist() {
         return selected_artist;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mMediaPlayer.start();
     }
 
     public class LocalBinder extends Binder{
