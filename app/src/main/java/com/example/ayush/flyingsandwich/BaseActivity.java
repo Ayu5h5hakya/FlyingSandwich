@@ -16,18 +16,17 @@ import com.example.ayush.flyingsandwich.service.PlayerService;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private boolean mPlayerBound;
-
     public static String TAG = "witcher";
+
+    protected ServiceConnection mServiceConnection;
+    protected boolean mPlayerBound;
 
     PlayerService playerService;
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, PlayerService.class);
-        startService(intent);
-        bindService(intent, mServiceConnection, isPlayerRunning(PlayerService.class) ? 0 : Context.BIND_AUTO_CREATE);
+        bindService(intent, mServiceConnection,Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -38,20 +37,6 @@ public class BaseActivity extends AppCompatActivity {
             mPlayerBound = false;
         }
     }
-
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            PlayerService.LocalBinder localBinder = (PlayerService.LocalBinder) iBinder;
-            playerService = localBinder.getService();
-            mPlayerBound=true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mPlayerBound = false;
-        }
-    };
 
     private boolean isPlayerRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
