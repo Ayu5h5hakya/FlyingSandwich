@@ -1,4 +1,4 @@
-package com.example.ayush.flyingsandwich.Utils;
+package com.example.ayush.flyingsandwich.Provider;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,6 +19,7 @@ public class MusicDirectoryEngine {
     private Context mContext;
     private static MusicDirectoryEngine musicDirectoryEngine=null;
     private String MUSIC_DIRECTORY="Music";
+    public static String FORMAT=".mp3";
 
     public static MusicDirectoryEngine getInstance(Context context){
         if (musicDirectoryEngine==null){
@@ -50,4 +51,5 @@ public class MusicDirectoryEngine {
         cursor.close();
         return musicFiles;
     }
+
 }

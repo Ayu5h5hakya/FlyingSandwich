@@ -3,16 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="0.5dp"
+    android:layout_marginBottom="0.5dp"
+    android:background="@color/colorchildItem">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_song"
-        tools:text="Song name here"/>
+        tools:text="Song name here"
+        android:textColor="@drawable/selected_row"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_artist"
-        tools:text="Artist name here"/>
+        tools:text="Artist name here"
+        android:textColor="@drawable/selected_row"/>
 </LinearLayout>

@@ -14,19 +14,36 @@ import com.example.ayush.flyingsandwich.service.PlayerService;
  * Created by Ayush on 2/28/2017.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public static String TAG = "witcher";
 
     protected ServiceConnection mServiceConnection;
     protected boolean mPlayerBound;
 
+
+
     PlayerService playerService;
 
     @Override
     protected void onStart() {
         super.onStart();
-        bindService(intent, mServiceConnection,Context.BIND_AUTO_CREATE);
+        mServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                PlayerService.LocalBinder localBinder = (PlayerService.LocalBinder) iBinder;
+                playerService = localBinder.getService();
+                mPlayerBound=true;
+                onServiceConnectionComplete();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                mPlayerBound = false;
+            }
+        };
+        Intent intent = new Intent(this,PlayerService.class);
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -47,4 +64,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    public abstract void onServiceConnectionComplete();
 }

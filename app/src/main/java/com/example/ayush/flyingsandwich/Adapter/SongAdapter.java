@@ -2,6 +2,7 @@ package com.example.ayush.flyingsandwich.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
 import com.example.ayush.flyingsandwich.Model.PlaylistItem;
 import com.example.ayush.flyingsandwich.R;
+import com.example.ayush.flyingsandwich.Util;
 
 import java.util.ArrayList;
 
@@ -22,10 +24,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
     private final Context context;
     private ArrayList<PlaylistItem> musicFiles;
     private SongSelectedListener songSelectedListener;
+    private SparseBooleanArray selectedItems;
 
     public SongAdapter(Context context, ArrayList<PlaylistItem> musicFiles) {
         this.context = context;
         this.musicFiles = musicFiles;
+        this.selectedItems = new SparseBooleanArray();
     }
 
     @Override
@@ -36,7 +40,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
     @Override
     public void onBindViewHolder(SongsViewHolder holder, int position) {
-        holder.tv_selected_song.setText(musicFiles.get(position).getSong_name());
+        String parsedName = Util.parseMusicFilename(musicFiles.get(position).getSong_name());
+        holder.itemView.setSelected(selectedItems.get(position,false));
+        holder.tv_selected_song.setText(parsedName);
         holder.tv_selected_artist.setText(musicFiles.get(position).getArtist_name());
 
     }
@@ -61,6 +67,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
         @Override
         public void onClick(View view) {
+            if (selectedItems.get(getAdapterPosition(),false)){
+                selectedItems.delete(getAdapterPosition());
+                itemView.setSelected(false);
+            }
+            else{
+                selectedItems.put(getAdapterPosition(),true);
+                itemView.setSelected(true);
+            }
             songSelectedListener.onSongSelected(getAdapterPosition());
         }
     }
