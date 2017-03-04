@@ -6,4 +6,5 @@
     <color name="colorchildItem">#212121</color>
     <color name="colorbackground">#151617</color>
     <color name="colorselected">#AA3932</color>
+    <color name="colorseeker">#EC4F46</color>
 </resources>

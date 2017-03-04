@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_now_playing"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +18,46 @@
         android:layout_centerInParent="true"
         android:id="@+id/id_np_albumart_circle"
         android:scaleType="centerCrop"
-        android:padding="80dp"/>
+        android:padding="150dp"
+        android:src="@drawable/ic_album_art"/>
+
+    <com.example.ayush.flyingsandwich.Provider.CircularSeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_circular_seeker"
+        android:layout_centerInParent="true"
+        app:circle_x_radius="150dp"
+        app:circle_y_radius="150dp"
+        app:use_custom_radii="true"
+        app:start_angle="120"
+        app:end_angle="60"
+        app:circle_progress_color="@color/colorseeker"
+        app:pointer_color="@color/colorseeker"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="start"
+        android:layout_below="@+id/id_circular_seeker"
+        android:layout_marginTop="-55dp"
+        android:layout_marginLeft="110dp"
+        android:id="@+id/id_current_time"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_circular_seeker"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="end"
+        android:layout_marginRight="110dp"
+        android:layout_marginTop="-55dp"
+        android:id="@+id/id_end_time"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:layout_centerInParent="true"
+        android:id="@+id/id_np_playpause"/>
 
 </RelativeLayout>
