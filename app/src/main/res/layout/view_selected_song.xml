@@ -14,12 +14,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_song"
         tools:text="Song name here"
-        android:textColor="@drawable/selected_row"/>
+        android:textColor="@color/selected_row"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_artist"
         tools:text="Artist name here"
-        android:textColor="@drawable/selected_row"/>
+        android:textColor="@color/selected_row"/>
 </LinearLayout>
