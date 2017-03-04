@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class NowPlayingActivity extends BaseActivity implements View.OnClickListener, CircularSeekBar.OnCircularSeekBarChangeListener {
 
-    ImageView circular_albumart;
+    ImageView circular_albumart,ib_repeat,ib_shuffle,ib_next,ib_previous;
     FloatingActionButton fab_np_playpause;
     TextView tv_currenttime, tv_endtime, tv_currentsong;
     CircularSeekBar sb_circle;
@@ -30,6 +30,10 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
 
         fab_np_playpause.setOnClickListener(this);
         sb_circle.setOnSeekBarChangeListener(this);
+        ib_repeat.setOnClickListener(this);
+        ib_shuffle.setOnClickListener(this);
+        ib_next.setOnClickListener(this);
+        ib_previous.setOnClickListener(this);
     }
 
     private void initUiComponents() {
@@ -40,6 +44,10 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
         tv_endtime = (TextView) findViewById(R.id.id_end_time);
         sb_circle = (CircularSeekBar) findViewById(R.id.id_circular_seeker);
         tv_currentsong = (TextView) findViewById(R.id.id_current_song);
+        ib_repeat = (ImageView) findViewById(R.id.id_np_repeat);
+        ib_shuffle = (ImageView) findViewById(R.id.id_np_shuffle);
+        ib_next = (ImageView) findViewById(R.id.id_np_next);
+        ib_previous = (ImageView) findViewById(R.id.id_np_rewind);
     }
 
     @Override
@@ -80,7 +88,19 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
                 if(playerService.changePlayPauseState() == PlayerService.MEDIA_PLAYING)
                     fab_np_playpause.setImageResource(R.drawable.play_vector);
                 else fab_np_playpause.setImageResource(R.drawable.pause_vector);
-
+            case R.id.id_np_shuffle:
+                playerService.changeShuffleState();
+                break;
+            case R.id.id_np_repeat:
+                playerService.changeRepeatState();
+                break;
+            case R.id.id_np_rewind:
+                onSongSelected(playerService.getIndex()-1);
+                break;
+            case R.id.id_np_next:
+                onSongSelected(playerService.getIndex()+1);
+                break;
+            default:
                 break;
         }
     }
@@ -98,5 +118,18 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onStartTrackingTouch(CircularSeekBar seekBar) {
 
+    }
+
+    @Override
+    public void onPlaybackCompleted(int pos) {
+
+    }
+
+    @Override
+    public void onSongSelected(int position) {
+        String song = musicFiles.get(position).getSong_name();
+        String songName = Util.parseMusicFilename(song);
+        tv_currentsong.setText(Util.setSongDisplayTitle(songName, playerService.getSelected_artist()), TextView.BufferType.SPANNABLE);
+        super.onSongSelected(position);
     }
 }

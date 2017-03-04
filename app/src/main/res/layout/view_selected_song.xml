@@ -9,8 +9,28 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/id_playlist_previous"
+        android:src="@drawable/rewind_vector"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/id_playlist_playpause"
         android:src="@drawable/pause_vector"
+        android:layout_toRightOf="@+id/id_playlist_previous"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_playlist_fforward"
+        android:src="@drawable/fforward_vector"
+        android:layout_toRightOf="@+id/id_playlist_playpause"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_centerVertical="true"/>

@@ -76,6 +76,56 @@
         app:fabSize="mini"
         android:layout_centerInParent="true"
         android:id="@+id/id_np_playpause"
-        android:src="@drawable/pause_vector"/>
+        android:src="@drawable/pause_vector"
+        app:backgroundTint="@color/colorselected"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/id_stake"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/id_np_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/np_fforward_vector"
+        android:layout_toRightOf="@+id/id_stake"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"/>
+
+    <ImageView
+        android:id="@+id/id_np_rewind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_toLeftOf="@+id/id_stake"
+        android:src="@drawable/np_rewind_vector"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"/>
+
+    <ImageView
+        android:id="@+id/id_np_repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_current_time"
+        android:layout_toLeftOf="@+id/id_stake"
+        android:src="@drawable/repeat_drawable"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"/>
+
+    <ImageView
+        android:id="@+id/id_np_shuffle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/id_stake"
+        android:src="@drawable/shuffle_drawable"
+        android:layout_below="@+id/id_end_time"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>
