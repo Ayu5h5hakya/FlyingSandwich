@@ -20,7 +20,8 @@
 
         <service android:name=".service.PlayerService" />
 
-        <activity android:name=".NowPlayingActivity"></activity>
+        <activity android:name=".NowPlayingActivity"
+                  android:theme="@style/NowPlayingTheme"/>
     </application>
 
 </manifest>

@@ -6,6 +6,9 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.SeekBar;
+
+import com.example.ayush.flyingsandwich.Provider.CircularSeekBar;
 
 import java.io.IOException;
 
@@ -86,4 +89,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (mMediaPlayer.isPlaying()) mMediaPlayer.pause();
         else mMediaPlayer.start();
     }
+
+    public void attachSeeker(CircularSeekBar seeker){
+        seeker.setProgress(mMediaPlayer.getCurrentPosition());
+    }
+
+    public void attachSeeker(SeekBar seeker){
+
+    }
+
+    public int getCurrentTrackMaxDuration(){return mMediaPlayer.getDuration();}
 }
