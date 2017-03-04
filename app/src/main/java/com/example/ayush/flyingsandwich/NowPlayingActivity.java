@@ -3,36 +3,33 @@ package com.example.ayush.flyingsandwich;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.ayush.flyingsandwich.Provider.CircleTransform;
 import com.example.ayush.flyingsandwich.Provider.CircularSeekBar;
+import com.example.ayush.flyingsandwich.service.PlayerService;
 import com.squareup.picasso.Picasso;
 
-public class NowPlayingActivity extends BaseActivity implements View.OnClickListener,CircularSeekBar.OnCircularSeekBarChangeListener{
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class NowPlayingActivity extends BaseActivity implements View.OnClickListener, CircularSeekBar.OnCircularSeekBarChangeListener {
 
     ImageView circular_albumart;
     FloatingActionButton fab_np_playpause;
-    TextView tv_currenttime,tv_endtime,tv_currentsong;
+    TextView tv_currenttime, tv_endtime, tv_currentsong;
     CircularSeekBar sb_circle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_now_playing);
 
         initUiComponents();
 
         fab_np_playpause.setOnClickListener(this);
         sb_circle.setOnSeekBarChangeListener(this);
-//        tv_endtime.setText(Util.convertDurationToMinutes(playerService.getCurrentTrackMaxDuration()));
-
     }
 
     private void initUiComponents() {
@@ -49,24 +46,41 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     public void onServiceConnectionComplete() {
 
         sb_circle.setMax(playerService.getCurrentTrackMaxDuration());
-        playerService.attachSeeker(sb_circle);
+        sb_circle.setProgress(playerService.getCurrentTrackPosition());
 
         String songName = Util.parseMusicFilename(playerService.getSelected_song());
 
-        tv_currentsong.setText(Util.setSongDisplayTitle(songName,playerService.getSelected_artist()), TextView.BufferType.SPANNABLE);
+        tv_endtime.setText(Util.convertDurationToMinutes(playerService.getCurrentTrackMaxDuration()));
+        tv_currentsong.setText(Util.setSongDisplayTitle(songName, playerService.getSelected_artist()), TextView.BufferType.SPANNABLE);
 
         Picasso.with(this)
-               .load(R.drawable.ic_album_art)
-               .transform(new CircleTransform())
-               .into(circular_albumart);
+                .load(R.drawable.ic_album_art)
+                .transform(new CircleTransform())
+                .into(circular_albumart);
+
+        Timer progressTimer = new Timer();
+        progressTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sb_circle.setProgress(sb_circle.getProgress() + PlayerService.SEEKER_INTERVAL);
+                    }
+                });
+            }
+        }, 0, PlayerService.SEEKER_INTERVAL);
     }
 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.id_np_playpause:
-                playerService.changePlayPauseState();
+                if(playerService.changePlayPauseState() == PlayerService.MEDIA_PLAYING)
+                    fab_np_playpause.setImageResource(R.drawable.play_vector);
+                else fab_np_playpause.setImageResource(R.drawable.pause_vector);
+
                 break;
         }
     }

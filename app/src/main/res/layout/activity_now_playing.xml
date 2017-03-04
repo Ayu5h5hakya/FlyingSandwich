@@ -20,7 +20,7 @@
         android:id="@+id/id_current_song"
         android:textColor="@android:color/white"
         android:textSize="20dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="@dimen/songTitleBtmMargin"
         tools:text="This is a test"/>
 
     <ImageView
@@ -29,7 +29,7 @@
         android:layout_centerInParent="true"
         android:id="@+id/id_np_albumart_circle"
         android:scaleType="centerCrop"
-        android:padding="180dp"
+        android:padding="@dimen/albumartPadding"
         android:src="@drawable/ic_album_art"/>
 
     <com.example.ayush.flyingsandwich.Provider.CircularSeekBar
@@ -44,13 +44,16 @@
         app:end_angle="60"
         app:circle_progress_color="@color/colorseeker"
         app:pointer_color="@color/colorseeker"
+        app:circle_stroke_width="2dp"
+        app:pointer_radius="0dp"
+        app:pointer_halo_color="@color/colorseeker"
         app:max="100"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="start"
         android:layout_below="@+id/id_circular_seeker"
-        android:layout_marginTop="-55dp"
+        android:layout_marginTop="-45dp"
         android:layout_marginLeft="110dp"
         android:id="@+id/id_current_time"
         android:textColor="@android:color/white"/>
@@ -63,7 +66,7 @@
         android:layout_alignParentRight="true"
         tools:text="end"
         android:layout_marginRight="110dp"
-        android:layout_marginTop="-55dp"
+        android:layout_marginTop="-45dp"
         android:id="@+id/id_end_time"
         android:textColor="@android:color/white"/>
 
@@ -72,6 +75,7 @@
         android:layout_height="wrap_content"
         app:fabSize="mini"
         android:layout_centerInParent="true"
-        android:id="@+id/id_np_playpause"/>
+        android:id="@+id/id_np_playpause"
+        android:src="@drawable/pause_vector"/>
 
 </RelativeLayout>

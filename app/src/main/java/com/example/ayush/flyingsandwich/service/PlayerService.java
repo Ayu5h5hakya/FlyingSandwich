@@ -21,6 +21,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
     private String selected_song, selected_artist;
+    public static int MEDIA_PLAYING=1;
+    public static int MEDIA_PAUSED=0;
+
+    public static int SEEKER_INTERVAL = 1000;
 
     @Override
     public void onCreate() {
@@ -85,18 +89,20 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         }
     }
 
-    public void changePlayPauseState() {
-        if (mMediaPlayer.isPlaying()) mMediaPlayer.pause();
-        else mMediaPlayer.start();
+    public int changePlayPauseState() {
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            return MEDIA_PAUSED;
+        }
+        else {
+            mMediaPlayer.start();
+            return MEDIA_PLAYING;
+        }
     }
 
-    public void attachSeeker(CircularSeekBar seeker){
-        seeker.setProgress(mMediaPlayer.getCurrentPosition());
-    }
-
-    public void attachSeeker(SeekBar seeker){
-
-    }
+    public int getCurrentTrackPosition(){return mMediaPlayer.getCurrentPosition();}
 
     public int getCurrentTrackMaxDuration(){return mMediaPlayer.getDuration();}
+
+    public boolean isMusicPlaying() { return mMediaPlayer.isPlaying();}
 }

@@ -19,7 +19,8 @@ public class Util {
 
     public static String convertDurationToMinutes(float duration) {
         float seconds = duration / 1000;
-        return seconds + "";
+        String durationinString = (seconds/60)%60+"."+(seconds%60);
+        return durationinString.substring(0,4);
     }
 
     public static SpannableStringBuilder setSongDisplayTitle(String songName, String artistName) {

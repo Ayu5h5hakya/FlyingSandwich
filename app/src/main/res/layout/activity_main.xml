@@ -8,13 +8,14 @@
         android:id="@+id/id_playlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/view_selected_song" />
+        tools:listitem="@layout/child_playlist_item" />
 
     <include
         layout="@layout/view_selected_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_song_view"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:visibility="gone"/>
 
 </FrameLayout>

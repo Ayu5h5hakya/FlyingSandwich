@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
-    android:layout_marginTop="0.5dp"
-    android:layout_marginBottom="0.5dp"
-    android:background="@color/colorchildItem">
-    <TextView
-        android:layout_width="match_parent"
+    android:background="@drawable/selected_transparency"
+    android:padding="20dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/id_selected_song"
-        tools:text="Song name here"
-        android:textColor="@color/selected_row"/>
+        android:id="@+id/id_playlist_playpause"
+        android:src="@drawable/pause_vector"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/id_v_current_song"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/id_selected_artist"
-        tools:text="Artist name here"
-        android:textColor="@color/selected_row"/>
-</LinearLayout>
+        android:textColor="@android:color/white"
+        tools:text="Song"
+        android:textAllCaps="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_centerVertical="true"/>
+
+
+
+</RelativeLayout>
