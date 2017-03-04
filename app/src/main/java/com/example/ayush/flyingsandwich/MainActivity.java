@@ -21,7 +21,6 @@ public class MainActivity extends BaseActivity implements SongSelectedListener,V
     private View view_selected_song;
     private SongAdapter mSongAdapter;
     private TextView mSelectedSong, mSelectedArtist;
-    private FloatingActionButton fab_playpause;
 
     MusicDirectoryEngine musicDirectoryEngine;
     ArrayList<PlaylistItem> musicFiles;
@@ -33,7 +32,6 @@ public class MainActivity extends BaseActivity implements SongSelectedListener,V
 
         initUIComponents();
 
-        //fab_playpause.setOnClickListener(this);
         musicDirectoryEngine = MusicDirectoryEngine.getInstance(this);
         musicFiles = musicDirectoryEngine.getAllMusic();
         mSongAdapter = new SongAdapter(this, musicFiles);
@@ -48,7 +46,6 @@ public class MainActivity extends BaseActivity implements SongSelectedListener,V
         view_selected_song = findViewById(R.id.id_selected_song_view);
         mSelectedSong = (TextView) findViewById(R.id.id_selected_song);
         mSelectedArtist = (TextView) findViewById(R.id.id_selected_artist);
-        //fab_playpause = (FloatingActionButton) findViewById(R.id.id_playpause);
     }
 
     @Override
@@ -68,9 +65,6 @@ public class MainActivity extends BaseActivity implements SongSelectedListener,V
                 Intent intent = new Intent(this,NowPlayingActivity.class);
                 startActivity(intent);
                 break;
-//            case R.id.id_playpause:
-//                playerService.changePlayPauseState();
-//                break;
             default:
                 break;
         }

@@ -8,11 +8,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.ayush.flyingsandwich.NowPlayingActivity">
+    tools:context="com.example.ayush.flyingsandwich.NowPlayingActivity"
+    android:background="@color/colorbackground">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/id_current_song"/>
+        android:layout_centerInParent="true"
+        android:id="@+id/id_np_albumart_circle"
+        android:scaleType="centerCrop"
+        android:padding="80dp"/>
 
 </RelativeLayout>

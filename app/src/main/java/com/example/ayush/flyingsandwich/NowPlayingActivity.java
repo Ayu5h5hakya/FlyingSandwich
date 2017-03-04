@@ -1,11 +1,14 @@
 package com.example.ayush.flyingsandwich;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.example.ayush.flyingsandwich.Provider.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 public class NowPlayingActivity extends BaseActivity {
 
-    TextView current;
+    ImageView circular_albumart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +20,15 @@ public class NowPlayingActivity extends BaseActivity {
     }
 
     private void initUiComponents() {
-        current = (TextView) findViewById(R.id.id_current_song);
+        circular_albumart = (ImageView) findViewById(R.id.id_np_albumart_circle);
     }
 
     @Override
     public void onServiceConnectionComplete() {
-        current.setText(playerService.getSelected_song() + "---" + playerService.getSelected_artist());
+        Picasso.with(this)
+               .load(R.drawable.ic_album_art)
+               .transform(new CircleTransform())
+               .into(circular_albumart);
     }
 
 
