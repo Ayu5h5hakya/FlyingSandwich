@@ -18,4 +18,9 @@
         android:layout_gravity="bottom"
         android:visibility="gone"/>
 
+    <include
+        android:id="@+id/id_platlist_songdetail"
+        layout="@layout/view_selected_song_detail"
+        android:visibility="gone"/>
+
 </FrameLayout>

@@ -78,13 +78,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
     public abstract void onServiceConnectionComplete();
 
     @Override
-    public void onSongSelected(String song, String artist) {
+    public void onSongSelected(String song, String artist,String album) {
         PlaylistItem result = realm.where(PlaylistItem.class)
                 .equalTo("song_name", song)
                 .equalTo("artist_name", artist)
                 .findFirst();
         if (result != null) {
-            playerService.setSelection(result.getSong_name(), result.getArtist_name());
+            playerService.setSelection(result.getSong_name(), result.getArtist_name(),result.getAlbum_name());
         }
 
     }

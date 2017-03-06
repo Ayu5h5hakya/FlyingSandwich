@@ -41,7 +41,8 @@ public class MusicDirectoryEngine {
         if (realm.where(PlaylistItem.class).findAll().size() == 0) {
             String[] projections = new String[]{
                     MediaStore.Audio.AudioColumns.DATA,
-                    MediaStore.Audio.ArtistColumns.ARTIST
+                    MediaStore.Audio.ArtistColumns.ARTIST,
+                    MediaStore.Audio.AlbumColumns.ALBUM
             };
             final Cursor cursor = mContentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     projections,
@@ -56,6 +57,7 @@ public class MusicDirectoryEngine {
                         PlaylistItem item = realm.createObject(PlaylistItem.class);
                         item.setSong_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATA)));
                         item.setArtist_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.ArtistColumns.ARTIST)));
+                        item.setAlbum_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AlbumColumns.ALBUM)));
                         musicFiles.add(item);
                     }
                 });

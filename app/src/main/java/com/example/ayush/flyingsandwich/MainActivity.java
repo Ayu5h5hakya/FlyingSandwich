@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ayush.flyingsandwich.Adapter.SongAdapter;
@@ -17,14 +18,19 @@ import com.example.ayush.flyingsandwich.Provider.MusicDirectoryEngine;
 import com.example.ayush.flyingsandwich.service.PlayerService;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static android.view.View.GONE;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView mSongRecycleview;
-    private View view_selected_song;
+    private View view_selected_song,view_selected_songDetail;
     private SongAdapter mSongAdapter;
-    private TextView mSelectedSong;
-    private ImageView img_playpause, img_previous, img_next;
+    private TextView mSelectedSong,mDetailSongName,mDetailArtistAlbum,mDetailCurrentTime,mDetailRemainingTime;
+    private ImageView img_playpause, img_previous, img_next,img_pl_art;
+    private ProgressBar mDetailSongProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         img_playpause = (ImageView) findViewById(R.id.id_playlist_playpause);
         img_next = (ImageView) findViewById(R.id.id_playlist_fforward);
         img_previous = (ImageView) findViewById(R.id.id_playlist_previous);
+        view_selected_songDetail = findViewById(R.id.id_platlist_songdetail);
+        mDetailSongProgress = (ProgressBar) findViewById(R.id.id_pl_progress);
+        mDetailArtistAlbum = (TextView) findViewById(R.id.id_pl_artistalbum);
+        mDetailSongName = (TextView) findViewById(R.id.id_pl_detail_song_name);
+        mDetailCurrentTime = (TextView) findViewById(R.id.id_pl_current_time);
+        mDetailRemainingTime = (TextView) findViewById(R.id.id_pl_remaining_time);
+
     }
 
     @Override
@@ -67,12 +80,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.id_playlist_fforward:
                 PlaylistItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
                 mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() + 1);
-                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name());
+                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name(), nextItem.getAlbum_name());
                 break;
             case R.id.id_playlist_previous:
                 PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
                 mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() - 1);
-                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
+                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name(),prevItem.getAlbum_name());
                 break;
             default:
                 break;
@@ -89,17 +102,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onSongSelected(String song, String artist) {
+    public void onSongSelected(String song, String artist,String album) {
         playerService.setCurrentPosition(mSongAdapter.getSelectedPosition());
         mSongAdapter.notifyDataSetChanged();
-        if (view_selected_song.getVisibility() == View.GONE)
+        if (view_selected_song.getVisibility() == GONE && view_selected_songDetail.getVisibility() == GONE) {
+            view_selected_songDetail.setVisibility(View.VISIBLE);
             view_selected_song.setVisibility(View.VISIBLE);
-        mSelectedSong.setText(Util.parseMusicFilename(song));
-        super.onSongSelected(song, artist);
+        }
+        setCurrentSongDetails(song,artist,album);
+        super.onSongSelected(song, artist,album);
     }
 
     @Override
     public void onPlaybackCompleted(int position) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mSongAdapter==null || playerService==null) return;
+        view_selected_songDetail.setVisibility(View.VISIBLE);
+        mSongAdapter.setSelectedPosition(playerService.getCurrentPosition());
+        setCurrentSongDetails(playerService.getSelected_song(),playerService.getSelected_artist(),playerService.getSelected_album());
+        mSongAdapter.notifyDataSetChanged();
+    }
+
+    private void setCurrentSongDetails(String song,String artist,String album) {
+        mSelectedSong.setText(Util.parseMusicFilename(song));
+        mDetailSongName.setText(Util.parseMusicFilename(song));
+        mDetailArtistAlbum.setText(artist+" - "+album);
+        mDetailSongProgress.setMax(playerService.getCurrentTrackMaxDuration());
+        Timer progressTimer = new Timer();
+        progressTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDetailSongProgress.setProgress(mDetailSongProgress.getProgress() + PlayerService.SEEKER_INTERVAL);
+                    }
+                });
+            }
+        }, 0, PlayerService.SEEKER_INTERVAL);
     }
 }

@@ -19,7 +19,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
-    private String selected_song, selected_artist;
+    private String selected_song, selected_artist,selected_album;
     private int position;
 
     public int getCurrentPosition() {
@@ -61,9 +61,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return true;
     }
 
-    public void setSelection(String selected_song, String selected_artist) {
+    public void setSelection(String selected_song, String selected_artist,String selected_album) {
         this.selected_song = selected_song;
         this.selected_artist = selected_artist;
+        this.selected_album = selected_album;
         playCurrentSelection();
     }
 
@@ -88,6 +89,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public String getSelected_artist() {
         return selected_artist;
+    }
+
+    public String getSelected_album() {
+        return selected_album;
     }
 
     @Override

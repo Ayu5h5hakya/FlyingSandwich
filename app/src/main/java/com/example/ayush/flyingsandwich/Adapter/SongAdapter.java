@@ -77,7 +77,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             selectedPosition = getAdapterPosition();
             notifyDataSetChanged();
             songSelectedListener.onSongSelected(musicFiles.get(selectedPosition).getSong_name(),
-                    musicFiles.get(selectedPosition).getArtist_name());
+                    musicFiles.get(selectedPosition).getArtist_name(),musicFiles.get(selectedPosition).getAlbum_name());
         }
     }
 }

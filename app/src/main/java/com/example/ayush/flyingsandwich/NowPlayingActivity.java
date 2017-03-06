@@ -17,7 +17,7 @@ import java.util.TimerTask;
 
 public class NowPlayingActivity extends BaseActivity implements View.OnClickListener, CircularSeekBar.OnCircularSeekBarChangeListener {
 
-    ImageView circular_albumart,ib_repeat,ib_shuffle,ib_next,ib_previous;
+    ImageView circular_albumart, ib_repeat, ib_shuffle, ib_next, ib_previous;
     FloatingActionButton fab_np_playpause;
     TextView tv_currenttime, tv_endtime, tv_currentsong;
     CircularSeekBar sb_circle;
@@ -86,7 +86,7 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_np_playpause:
-                if(playerService.changePlayPauseState() == PlayerService.MEDIA_PLAYING)
+                if (playerService.changePlayPauseState() == PlayerService.MEDIA_PLAYING)
                     fab_np_playpause.setImageResource(R.drawable.play_vector);
                 else fab_np_playpause.setImageResource(R.drawable.pause_vector);
             case R.id.id_np_shuffle:
@@ -97,11 +97,13 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.id_np_rewind:
                 PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
-                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
+                playerService.setCurrentPosition(playerService.getCurrentPosition() - 1);
+                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name(),prevItem.getAlbum_name());
                 break;
             case R.id.id_np_next:
                 PlaylistItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
-                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name());
+                playerService.setCurrentPosition(playerService.getCurrentPosition() + 1);
+                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name(),nextItem.getAlbum_name());
                 break;
             default:
                 break;
@@ -129,9 +131,9 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void onSongSelected(String song, String artist) {
-        String finalString = Util.setSongDisplayTitle(Util.parseMusicFilename(song),artist).toString();
+    public void onSongSelected(String song, String artist,String album) {
+        String finalString = Util.setSongDisplayTitle(Util.parseMusicFilename(song), artist).toString();
         tv_currentsong.setText(finalString, TextView.BufferType.SPANNABLE);
-        super.onSongSelected(song, artist);
+        super.onSongSelected(song, artist,album);
     }
 }

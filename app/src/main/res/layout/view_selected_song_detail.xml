@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="20dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/id_pl_imageview"
+        android:src="@drawable/ic_album_art"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_pl_detail_song_name"
+        android:layout_toRightOf="@+id/id_pl_imageview"
+        tools:text="Song name"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_pl_artistalbum"
+        tools:text="Arttist name -- album name"
+        android:layout_below="@+id/id_pl_detail_song_name"
+        android:layout_toRightOf="@+id/id_pl_imageview"
+        android:layout_marginBottom="10dp"/>
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PlaylistProgress"
+        android:layout_below="@+id/id_pl_artistalbum"
+        android:layout_toRightOf="@+id/id_pl_imageview"
+        android:id="@+id/id_pl_progress"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_pl_progress"
+        tools:text="current"
+        android:layout_toRightOf="@+id/id_pl_imageview"
+        android:id="@+id/id_pl_current_time"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="remaining"
+        android:layout_below="@+id/id_pl_progress"
+        android:layout_alignEnd="@+id/id_pl_progress"
+        android:layout_alignRight="@+id/id_pl_progress"
+        android:id="@+id/id_pl_remaining_time"/>
+
+</RelativeLayout>
