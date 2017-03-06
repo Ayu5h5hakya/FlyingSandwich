@@ -1,11 +1,16 @@
 package com.example.ayush.flyingsandwich.Model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Ayush on 2/28/2017.
  */
 
-public class PlaylistItem {
+public class PlaylistItem extends RealmObject{
     private String song_name,artist_name;
+
+    public PlaylistItem() {
+    }
 
     public PlaylistItem(String song_name, String artist_name) {
         this.song_name = song_name;

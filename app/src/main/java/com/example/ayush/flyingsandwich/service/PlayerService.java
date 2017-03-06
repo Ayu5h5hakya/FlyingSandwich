@@ -15,19 +15,23 @@ import java.io.IOException;
  * Created by Ayush on 2/28/2017.
  */
 
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener,MediaPlayer.OnCompletionListener {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
     private String selected_song, selected_artist;
     private int position;
 
-    public int getIndex() {
+    public int getCurrentPosition() {
         return position;
     }
 
-    public static int MEDIA_PLAYING=1;
-    public static int MEDIA_PAUSED=0;
+    public void setCurrentPosition(int position) {
+        this.position = position;
+    }
+
+    public static int MEDIA_PLAYING = 1;
+    public static int MEDIA_PAUSED = 0;
     public static int SEEKER_INTERVAL = 1000;
     public boolean MEDIA_SHUFFLE_ON;
     public boolean MEDIA_REPEAT_ON;
@@ -57,10 +61,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return true;
     }
 
-    public void setSelection(int position,String selected_song, String selected_artist) {
+    public void setSelection(String selected_song, String selected_artist) {
         this.selected_song = selected_song;
         this.selected_artist = selected_artist;
-        this.position = position;
         playCurrentSelection();
     }
 
@@ -95,7 +98,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         if (MEDIA_REPEAT_ON) mMediaPlayer.setLooping(true);
-        else{
+        else {
             playbackChangeRequestListener.onPlaybackCompleted(position);
         }
     }
@@ -110,24 +113,29 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
             return MEDIA_PAUSED;
-        }
-        else {
+        } else {
             mMediaPlayer.start();
             return MEDIA_PLAYING;
         }
     }
 
-    public int getCurrentTrackPosition(){return mMediaPlayer.getCurrentPosition();}
+    public int getCurrentTrackPosition() {
+        return mMediaPlayer.getCurrentPosition();
+    }
 
-    public int getCurrentTrackMaxDuration(){return mMediaPlayer.getDuration();}
+    public int getCurrentTrackMaxDuration() {
+        return mMediaPlayer.getDuration();
+    }
 
-    public boolean isMusicPlaying() { return mMediaPlayer.isPlaying();}
+    public boolean isMusicPlaying() {
+        return mMediaPlayer.isPlaying();
+    }
 
-    public void changeShuffleState(){
+    public void changeShuffleState() {
         MEDIA_SHUFFLE_ON = !MEDIA_SHUFFLE_ON;
     }
 
-    public void changeRepeatState(){
+    public void changeRepeatState() {
         MEDIA_REPEAT_ON = !MEDIA_REPEAT_ON;
     }
 }

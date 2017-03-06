@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ayush.flyingsandwich.Model.PlaylistItem;
 import com.example.ayush.flyingsandwich.Provider.CircleTransform;
 import com.example.ayush.flyingsandwich.Provider.CircularSeekBar;
 import com.example.ayush.flyingsandwich.service.PlayerService;
@@ -95,10 +96,12 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
                 playerService.changeRepeatState();
                 break;
             case R.id.id_np_rewind:
-                onSongSelected(playerService.getIndex()-1);
+                PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
+                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
                 break;
             case R.id.id_np_next:
-                onSongSelected(playerService.getIndex()+1);
+                PlaylistItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
+                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name());
                 break;
             default:
                 break;
@@ -126,10 +129,9 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void onSongSelected(int position) {
-        String song = musicFiles.get(position).getSong_name();
-        String songName = Util.parseMusicFilename(song);
-        tv_currentsong.setText(Util.setSongDisplayTitle(songName, playerService.getSelected_artist()), TextView.BufferType.SPANNABLE);
-        super.onSongSelected(position);
+    public void onSongSelected(String song, String artist) {
+        String finalString = Util.setSongDisplayTitle(Util.parseMusicFilename(song),artist).toString();
+        tv_currentsong.setText(finalString, TextView.BufferType.SPANNABLE);
+        super.onSongSelected(song, artist);
     }
 }

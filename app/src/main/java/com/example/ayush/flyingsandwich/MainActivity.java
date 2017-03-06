@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View view_selected_song;
     private SongAdapter mSongAdapter;
     private TextView mSelectedSong;
-    private ImageView img_playpause,img_previous,img_next;
+    private ImageView img_playpause, img_previous, img_next;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         initUIComponents();
 
-        mSongAdapter = new SongAdapter(this, musicFiles);
+        mSongAdapter = new SongAdapter(this, getAllMusic());
         mSongAdapter.setSongClickListener(this);
         mSongRecycleview.setLayoutManager(new LinearLayoutManager(this));
         mSongRecycleview.setAdapter(mSongAdapter);
@@ -65,10 +65,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 else img_playpause.setImageResource(R.drawable.pause_vector);
                 break;
             case R.id.id_playlist_fforward:
-                onSongSelected(playerService.getIndex()+1);
+                PlaylistItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
+                mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() + 1);
+                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name());
                 break;
             case R.id.id_playlist_previous:
-                onSongSelected(playerService.getIndex()-1);
+                PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
+                mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() - 1);
+                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
                 break;
             default:
                 break;
@@ -85,16 +89,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onSongSelected(int position) {
-        String song = musicFiles.get(position).getSong_name();
+    public void onSongSelected(String song, String artist) {
+        playerService.setCurrentPosition(mSongAdapter.getSelectedPosition());
+        mSongAdapter.notifyDataSetChanged();
         if (view_selected_song.getVisibility() == View.GONE)
             view_selected_song.setVisibility(View.VISIBLE);
         mSelectedSong.setText(Util.parseMusicFilename(song));
-        super.onSongSelected(position);
+        super.onSongSelected(song, artist);
     }
 
     @Override
     public void onPlaybackCompleted(int position) {
-        onSongSelected(position+1);
+
     }
 }

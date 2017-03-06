@@ -1,16 +1,13 @@
 package com.example.ayush.flyingsandwich;
 
-import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.example.ayush.flyingsandwich.Interface.PlaybackChangeRequestListener;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
@@ -20,18 +17,21 @@ import com.example.ayush.flyingsandwich.service.PlayerService;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 /**
  * Created by Ayush on 2/28/2017.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements PlaybackChangeRequestListener,SongSelectedListener {
+public abstract class BaseActivity extends AppCompatActivity implements PlaybackChangeRequestListener, SongSelectedListener {
 
     public static String TAG = "witcher";
 
     protected ServiceConnection mServiceConnection;
     protected boolean mPlayerBound;
-    protected ArrayList<PlaylistItem> musicFiles;
     protected MusicDirectoryEngine musicDirectoryEngine;
+    protected Realm realm;
 
 
     PlayerService playerService;
@@ -39,8 +39,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Realm.init(this);
+        realm = Realm.getDefaultInstance();
         musicDirectoryEngine = MusicDirectoryEngine.getInstance(this);
-        musicFiles = musicDirectoryEngine.getAllMusic();
+        musicDirectoryEngine.storeAllFiles(realm);
     }
 
     @Override
@@ -51,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 PlayerService.LocalBinder localBinder = (PlayerService.LocalBinder) iBinder;
                 playerService = localBinder.getService();
-                mPlayerBound=true;
+                mPlayerBound = true;
                 onServiceConnectionComplete();
             }
 
@@ -60,7 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
                 mPlayerBound = false;
             }
         };
-        Intent intent = new Intent(this,PlayerService.class);
+        Intent intent = new Intent(this, PlayerService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -73,23 +75,30 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
         }
     }
 
-    private boolean isPlayerRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public abstract void onServiceConnectionComplete();
 
     @Override
-    public void onSongSelected(int position) {
-        String song = musicFiles.get(position).getSong_name();
-        String artist = musicFiles.get(position).getArtist_name();
-        playerService.setSelection(position,song, artist);
+    public void onSongSelected(String song, String artist) {
+        PlaylistItem result = realm.where(PlaylistItem.class)
+                .equalTo("song_name", song)
+                .equalTo("artist_name", artist)
+                .findFirst();
+        if (result != null) {
+            playerService.setSelection(result.getSong_name(), result.getArtist_name());
+        }
 
+    }
+
+    protected ArrayList<PlaylistItem> getAllMusic() {
+        ArrayList<PlaylistItem> finalresults = new ArrayList<>();
+        RealmResults<PlaylistItem> results = realm.where(PlaylistItem.class).findAll();
+        for (PlaylistItem temp : results) {
+            finalresults.add(temp);
+        }
+        return finalresults;
+    }
+
+    protected PlaylistItem getSongByPosition(int index) {
+        return musicDirectoryEngine.getSongByPosition(index);
     }
 }
