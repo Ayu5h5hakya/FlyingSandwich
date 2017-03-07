@@ -1,8 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/id_playlist"
@@ -11,16 +11,33 @@
         tools:listitem="@layout/child_playlist_item" />
 
     <include
+        android:id="@+id/id_selected_song_view"
         layout="@layout/view_selected_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/id_selected_song_view"
         android:layout_gravity="bottom"
-        android:visibility="gone"/>
+        android:visibility="visible" />
 
-    <include
-        android:id="@+id/id_platlist_songdetail"
-        layout="@layout/view_selected_song_detail"
-        android:visibility="gone"/>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-</FrameLayout>
+        <include
+            layout="@layout/playlisttoolbar"
+            android:id="@+id/playlist_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+
+        <include
+            android:id="@+id/id_platlist_songdetail"
+            layout="@layout/view_selected_song_detail"
+            android:visibility="visible" />
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>
