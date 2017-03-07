@@ -3,6 +3,7 @@ package com.example.ayush.flyingsandwich;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.ayush.flyingsandwich.Adapter.MediaAdapter;
 import com.example.ayush.flyingsandwich.Adapter.SongAdapter;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
 import com.example.ayush.flyingsandwich.Model.PlaylistItem;
@@ -24,13 +26,14 @@ import java.util.TimerTask;
 
 import static android.view.View.GONE;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private RecyclerView mSongRecycleview;
+    private ViewPager mViewPager;
     private View view_selected_song, view_selected_songDetail;
     private SongAdapter mSongAdapter;
     private TextView mSelectedSong, mDetailSongName, mDetailArtistAlbum, mDetailCurrentTime, mDetailRemainingTime;
-    private ImageView img_playpause, img_previous, img_next, img_pl_art;
+    private ImageView img_playpause, img_previous, img_next, img_pl_art,img_pl_song,img_pl_artist,img_pl_album;
     private ProgressBar mDetailSongProgress;
 
     @Override
@@ -48,6 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         img_playpause.setOnClickListener(this);
         img_next.setOnClickListener(this);
         img_previous.setOnClickListener(this);
+        mViewPager.setAdapter(new MediaAdapter(this));
     }
 
     private void initUIComponents() {
@@ -63,7 +67,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mDetailSongName = (TextView) findViewById(R.id.id_pl_detail_song_name);
         mDetailCurrentTime = (TextView) findViewById(R.id.id_pl_current_time);
         mDetailRemainingTime = (TextView) findViewById(R.id.id_pl_remaining_time);
-
+        img_pl_song = (ImageView) findViewById(R.id.id_pl_song);
+        img_pl_artist = (ImageView) findViewById(R.id.id_pl_artist);
+        img_pl_album = (ImageView) findViewById(R.id.id_pl_album);
+        mViewPager = (ViewPager) findViewById(R.id.id_main_pager);
     }
 
     @Override
@@ -86,6 +93,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
                 mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() - 1);
                 onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name(), prevItem.getAlbum_name());
+                break;
+            case R.id.id_pl_album:
+                break;
+            case R.id.id_pl_artist:
+                break;
+            case R.id.id_pl_song:
                 break;
             default:
                 break;
@@ -136,7 +149,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void setCurrentSongDetails(String song, String artist, String album) {
         mSelectedSong.setText(Util.parseMusicFilename(song));
         mDetailSongName.setText(Util.parseMusicFilename(song));
-        mDetailArtistAlbum.setText(artist + " - " + album);
+        mDetailArtistAlbum.setText(artist + "\n" + album);
+        mDetailSongProgress.setProgress(0);
         mDetailSongProgress.setMax(playerService.getCurrentTrackMaxDuration());
         Timer progressTimer = new Timer();
         progressTimer.schedule(new TimerTask() {
@@ -152,13 +166,4 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }, 0, PlayerService.SEEKER_INTERVAL);
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (view.getId()) {
-            case R.id.id_pl_detail_song_name:
-                gotoNowPlaying();
-                return true;
-        }
-        return false;
-    }
 }

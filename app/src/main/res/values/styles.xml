@@ -14,8 +14,8 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="PlaylistProgress" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:color">@color/colorselected</item>
+    <style name="AppTheme.RedAccent">
+        <item name="colorAccent">@color/colorselected</item>
     </style>
 
 </resources>

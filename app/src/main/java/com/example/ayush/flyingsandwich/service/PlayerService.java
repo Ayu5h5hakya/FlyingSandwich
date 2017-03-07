@@ -15,7 +15,7 @@ import java.io.IOException;
  * Created by Ayush on 2/28/2017.
  */
 
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener{
 
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
@@ -35,14 +35,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public static int SEEKER_INTERVAL = 1000;
     public boolean MEDIA_SHUFFLE_ON;
     public boolean MEDIA_REPEAT_ON;
-    public PlaybackChangeRequestListener playbackChangeRequestListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnPreparedListener(this);
-        mMediaPlayer.setOnCompletionListener(this);
     }
 
     @Nullable
@@ -98,14 +96,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mMediaPlayer.start();
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        if (MEDIA_REPEAT_ON) mMediaPlayer.setLooping(true);
-        else {
-            playbackChangeRequestListener.onPlaybackCompleted(position);
-        }
     }
 
     public class LocalBinder extends Binder {

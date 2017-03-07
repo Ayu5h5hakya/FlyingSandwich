@@ -132,8 +132,9 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onSongSelected(String song, String artist,String album) {
-        String finalString = Util.setSongDisplayTitle(Util.parseMusicFilename(song), artist).toString();
-        tv_currentsong.setText(finalString, TextView.BufferType.SPANNABLE);
+        tv_currentsong.setText(Util.setSongDisplayTitle(Util.parseMusicFilename(song), artist), TextView.BufferType.SPANNABLE);
         super.onSongSelected(song, artist,album);
+        sb_circle.setProgress(0);
+        sb_circle.setMax(playerService.getCurrentTrackMaxDuration());
     }
 }

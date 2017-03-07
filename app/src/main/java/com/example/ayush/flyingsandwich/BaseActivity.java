@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.ayush.flyingsandwich.Interface.PlaybackChangeRequestListener;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
@@ -16,6 +18,8 @@ import com.example.ayush.flyingsandwich.Provider.MusicDirectoryEngine;
 import com.example.ayush.flyingsandwich.service.PlayerService;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
