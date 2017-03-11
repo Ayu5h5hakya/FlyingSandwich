@@ -1,5 +1,4 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -15,7 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:visibility="visible" />
+        android:visibility="gone" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_margin="20dp"
+        app:layout_anchor="@id/id_main_pager"
+        android:src="@drawable/song_drawable"
+        app:backgroundTint="@color/colorbackground"
+        android:id="@+id/id_playerToggle"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -33,10 +42,10 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_collapseMode="pin" />
 
-        <include
-            android:id="@+id/id_platlist_songdetail"
-            layout="@layout/view_selected_song_detail"
-            android:visibility="gone" />
+        <!--<include-->
+            <!--android:id="@+id/id_platlist_songdetail"-->
+            <!--layout="@layout/view_selected_song_detail"-->
+            <!--android:visibility="gone" />-->
 
     </android.support.design.widget.AppBarLayout>
 

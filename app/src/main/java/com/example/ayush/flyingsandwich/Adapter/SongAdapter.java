@@ -2,6 +2,7 @@ package com.example.ayush.flyingsandwich.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         return musicFiles.size();
     }
 
-    public class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnCreateContextMenuListener {
         TextView tv_selected_song, tv_selected_artist;
 
         public SongsViewHolder(View itemView) {
@@ -70,6 +72,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             tv_selected_song = (TextView) itemView.findViewById(R.id.id_selected_song);
             tv_selected_artist = (TextView) itemView.findViewById(R.id.id_selected_artist);
             itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         @Override
@@ -78,6 +81,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             notifyDataSetChanged();
             songSelectedListener.onSongSelected(musicFiles.get(selectedPosition).getSong_name(),
                     musicFiles.get(selectedPosition).getArtist_name(),musicFiles.get(selectedPosition).getAlbum_name());
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            contextMenu.add("Delete");
         }
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,12 +14,43 @@
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_song"
         tools:text="Song name here"
-        android:textColor="@color/selected_row"/>
+        android:textColor="@color/selected_row"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_toLeftOf="@+id/id_stake"/>
 
     <TextView
+        android:layout_below="@+id/id_selected_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/id_selected_artist"
         tools:text="Artist name here"
-        android:textColor="@color/selected_row"/>
-</LinearLayout>
+        android:textColor="@color/selected_row"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_toLeftOf="@+id/id_stake"/>
+
+    <View
+        android:layout_width="1dp"
+        android:id="@+id/id_stake"
+        android:layout_height="1dp"
+        android:layout_toLeftOf="@+id/id_child_pl_fav"/>
+
+    <ImageView
+        android:id="@+id/id_child_pl_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/child_overflow"
+        android:layout_marginLeft="8dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:layout_toLeftOf="@+id/id_child_pl_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_child_pl_fav"
+        android:src="@drawable/child_fav"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

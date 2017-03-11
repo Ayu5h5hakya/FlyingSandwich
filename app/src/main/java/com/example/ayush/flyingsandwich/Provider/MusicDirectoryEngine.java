@@ -1,8 +1,10 @@
 package com.example.ayush.flyingsandwich.Provider;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.example.ayush.flyingsandwich.Model.PlaylistItem;
@@ -19,6 +21,7 @@ import io.realm.RealmResults;
 public class MusicDirectoryEngine {
 
     private ContentResolver mContentResolver;
+    private final static Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
     private Context mContext;
     private static MusicDirectoryEngine musicDirectoryEngine = null;
     private String MUSIC_DIRECTORY = "Music";
@@ -42,7 +45,8 @@ public class MusicDirectoryEngine {
             String[] projections = new String[]{
                     MediaStore.Audio.AudioColumns.DATA,
                     MediaStore.Audio.ArtistColumns.ARTIST,
-                    MediaStore.Audio.AlbumColumns.ALBUM
+                    MediaStore.Audio.AlbumColumns.ALBUM,
+                    MediaStore.Audio.AlbumColumns.ALBUM_ID
             };
             final Cursor cursor = mContentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     projections,
@@ -58,14 +62,16 @@ public class MusicDirectoryEngine {
                         item.setSong_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATA)));
                         item.setArtist_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.ArtistColumns.ARTIST)));
                         item.setAlbum_name(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AlbumColumns.ALBUM)));
+                        String albumUri = ContentUris.withAppendedId(sArtworkUri,
+                                cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AlbumColumns.ALBUM_ID))).toString();
+                        item.setAlbumart_url(albumUri);
                         musicFiles.add(item);
                     }
                 });
 
             }
             cursor.close();
-        }
-        else{
+        } else {
             RealmResults<PlaylistItem> results = realm.where(PlaylistItem.class).findAll();
             for (PlaylistItem temp : results) {
                 musicFiles.add(temp);

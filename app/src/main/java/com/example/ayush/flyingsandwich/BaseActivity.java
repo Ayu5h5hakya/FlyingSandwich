@@ -88,7 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
                 .equalTo("artist_name", artist)
                 .findFirst();
         if (result != null) {
-            playerService.setSelection(result.getSong_name(), result.getArtist_name(),result.getAlbum_name());
+            playerService.setSelection(result.getSong_name(), result.getArtist_name(),result.getAlbum_name(),result.getAlbumart_url());
         }
 
     }

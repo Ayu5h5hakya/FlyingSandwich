@@ -1,52 +1,42 @@
 package com.example.ayush.flyingsandwich.Adapter;
 
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.ayush.flyingsandwich.R;
+import com.example.ayush.flyingsandwich.Fragment.AlbumFragment;
+import com.example.ayush.flyingsandwich.Fragment.ArtistFragment;
+import com.example.ayush.flyingsandwich.Fragment.SongFragment;
+import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+
+import java.util.ArrayList;
 
 /**
  * Created by Ayush on 3/7/2017.
  */
 
-public class MediaAdapter extends PagerAdapter{
+public class MediaAdapter extends FragmentPagerAdapter {
 
-    private int NUMBER_OF_FRAGS = 3;
-    Context context;
+    private static int FRAGMENT_COUNT=3;
+    private ArrayList<PlaylistItem> playlistItems= new ArrayList<>();
 
-    public MediaAdapter(Context context) {
-        this.context = context;
+    public MediaAdapter(FragmentManager fm, ArrayList<PlaylistItem> playlistItems) {
+        super(fm);
+        this.playlistItems = playlistItems;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        ViewGroup layout = null;
+    public Fragment getItem(int position) {
         switch (position){
-            case 0:
-                layout = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.fragment_playlist,container,false);
-                break;
-            case 1:
-                layout = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.fragment_artistlist,container,false);
-                break;
-            case 2:
-                layout = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.fragment_albumlist,container,false);
-                break;
-            default:
-                break;
+            case 0: return SongFragment.getInstance(playlistItems);
+            case 1: return ArtistFragment.getInstance(playlistItems);
+            case 2: return AlbumFragment.getInstance(playlistItems);
         }
-        return layout;
+        return null;
     }
 
     @Override
     public int getCount() {
-        return NUMBER_OF_FRAGS;
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        return FRAGMENT_COUNT;
     }
 }

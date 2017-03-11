@@ -3,6 +3,7 @@ package com.example.ayush.flyingsandwich.service;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
     private String selected_song, selected_artist,selected_album;
+    private Uri selected_albumart;
     private int position;
 
     public int getCurrentPosition() {
@@ -59,13 +61,17 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return true;
     }
 
-    public void setSelection(String selected_song, String selected_artist,String selected_album) {
+    public void setSelection(String selected_song, String selected_artist,String selected_album,Uri selected_albumart) {
         this.selected_song = selected_song;
         this.selected_artist = selected_artist;
         this.selected_album = selected_album;
+        this.selected_albumart = selected_albumart;
         playCurrentSelection();
     }
 
+    public Uri getSelected_albumart() {
+        return selected_albumart;
+    }
 
     private void playCurrentSelection() {
         if (mMediaPlayer.isPlaying()) {

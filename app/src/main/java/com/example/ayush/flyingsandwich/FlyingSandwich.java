@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.example.ayush.flyingsandwich.service.PlayerService;
+import com.facebook.stetho.Stetho;
 
 import io.realm.Realm;
 
@@ -19,5 +20,23 @@ public class FlyingSandwich extends Application {
         Intent intent = new Intent(this, PlayerService.class);
         startService(intent);
         Realm.init(this);
+        Stetho.InitializerBuilder initializerBuilder =
+                Stetho.newInitializerBuilder(this);
+
+// Enable Chrome DevTools
+        initializerBuilder.enableWebKitInspector(
+                Stetho.defaultInspectorModulesProvider(this)
+        );
+
+// Enable command line interface
+        initializerBuilder.enableDumpapp(
+                Stetho.defaultDumperPluginsProvider(this)
+        );
+
+// Use the InitializerBuilder to generate an Initializer
+        Stetho.Initializer initializer = initializerBuilder.build();
+
+// Initialize Stetho with the Initializer
+        Stetho.initialize(initializer);
     }
 }

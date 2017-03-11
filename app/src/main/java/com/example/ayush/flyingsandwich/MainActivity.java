@@ -28,13 +28,15 @@ import static android.view.View.GONE;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener{
 
-    private RecyclerView mSongRecycleview;
     private ViewPager mViewPager;
     private View view_selected_song, view_selected_songDetail;
     private SongAdapter mSongAdapter;
     private TextView mSelectedSong, mDetailSongName, mDetailArtistAlbum, mDetailCurrentTime, mDetailRemainingTime;
-    private ImageView img_playpause, img_previous, img_next, img_pl_art,img_pl_song,img_pl_artist,img_pl_album;
+    private ImageView img_playpause, img_previous, img_next, img_pl_art,img_pl_song,img_pl_artist,img_pl_album,img_child_overflow;
     private ProgressBar mDetailSongProgress;
+    private FloatingActionButton mFab;
+
+    public static String ARGUMENTS_PLAYLIST="Playlist";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,34 +45,66 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         initUIComponents();
 
+        setupListeners();
+    }
+
+    private void setupListeners() {
         mSongAdapter = new SongAdapter(this, getAllMusic());
         mSongAdapter.setSongClickListener(this);
-        mSongRecycleview.setLayoutManager(new LinearLayoutManager(this));
-        mSongRecycleview.setAdapter(mSongAdapter);
         view_selected_song.setOnClickListener(this);
         img_playpause.setOnClickListener(this);
         img_next.setOnClickListener(this);
         img_previous.setOnClickListener(this);
-        mViewPager.setAdapter(new MediaAdapter(this));
+        mFab.setOnClickListener(this);
+        mViewPager.setAdapter(new MediaAdapter(getSupportFragmentManager(),getAllMusic()));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d(TAG, "onPageScrolled: position"+position+" offset" + positionOffset + " offsetPixels"+positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        mFab.setImageResource(R.drawable.song_drawable);
+                        break;
+                    case 1:
+                        mFab.setImageResource(R.drawable.artist_drawable);
+                        break;
+                    case 2:
+                        mFab.setImageResource(R.drawable.album_drawable);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.d(TAG, "onPageScrollStateChanged: "+state);
+            }
+        });
     }
 
     private void initUIComponents() {
-        mSongRecycleview = (RecyclerView) findViewById(R.id.id_playlist);
         view_selected_song = findViewById(R.id.id_selected_song_view);
         mSelectedSong = (TextView) findViewById(R.id.id_v_current_song);
         img_playpause = (ImageView) findViewById(R.id.id_playlist_playpause);
         img_next = (ImageView) findViewById(R.id.id_playlist_fforward);
         img_previous = (ImageView) findViewById(R.id.id_playlist_previous);
-        view_selected_songDetail = findViewById(R.id.id_platlist_songdetail);
-        mDetailSongProgress = (ProgressBar) findViewById(R.id.id_pl_progress);
-        mDetailArtistAlbum = (TextView) findViewById(R.id.id_pl_artistalbum);
-        mDetailSongName = (TextView) findViewById(R.id.id_pl_detail_song_name);
-        mDetailCurrentTime = (TextView) findViewById(R.id.id_pl_current_time);
-        mDetailRemainingTime = (TextView) findViewById(R.id.id_pl_remaining_time);
+        //view_selected_songDetail = findViewById(R.id.id_platlist_songdetail);
+//        mDetailSongProgress = (ProgressBar) findViewById(R.id.id_pl_progress);
+//        mDetailArtistAlbum = (TextView) findViewById(R.id.id_pl_artistalbum);
+//        mDetailSongName = (TextView) findViewById(R.id.id_pl_detail_song_name);
+//        mDetailCurrentTime = (TextView) findViewById(R.id.id_pl_current_time);
+//        mDetailRemainingTime = (TextView) findViewById(R.id.id_pl_remaining_time);
         img_pl_song = (ImageView) findViewById(R.id.id_pl_song);
         img_pl_artist = (ImageView) findViewById(R.id.id_pl_artist);
         img_pl_album = (ImageView) findViewById(R.id.id_pl_album);
         mViewPager = (ViewPager) findViewById(R.id.id_main_pager);
+        mFab = (FloatingActionButton) findViewById(R.id.id_playerToggle);
+        img_child_overflow = (ImageView) findViewById(R.id.id_child_pl_menu);
     }
 
     @Override
@@ -100,6 +134,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.id_pl_song:
                 break;
+            case R.id.id_child_pl_menu:
+
+                break;
             default:
                 break;
         }
@@ -123,8 +160,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onSongSelected(String song, String artist, String album) {
         playerService.setCurrentPosition(mSongAdapter.getSelectedPosition());
         mSongAdapter.notifyDataSetChanged();
-        if (view_selected_song.getVisibility() == GONE && view_selected_songDetail.getVisibility() == GONE) {
-            view_selected_songDetail.setVisibility(View.VISIBLE);
+        if (view_selected_song.getVisibility() == GONE) {
             view_selected_song.setVisibility(View.VISIBLE);
         }
         setCurrentSongDetails(song, artist, album);
@@ -140,7 +176,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     protected void onResume() {
         super.onResume();
         if (mSongAdapter == null || playerService == null) return;
-        view_selected_songDetail.setVisibility(View.VISIBLE);
         mSongAdapter.setSelectedPosition(playerService.getCurrentPosition());
         setCurrentSongDetails(playerService.getSelected_song(), playerService.getSelected_artist(), playerService.getSelected_album());
         mSongAdapter.notifyDataSetChanged();
@@ -148,22 +183,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private void setCurrentSongDetails(String song, String artist, String album) {
         mSelectedSong.setText(Util.parseMusicFilename(song));
-        mDetailSongName.setText(Util.parseMusicFilename(song));
-        mDetailArtistAlbum.setText(artist + "\n" + album);
-        mDetailSongProgress.setProgress(0);
-        mDetailSongProgress.setMax(playerService.getCurrentTrackMaxDuration());
-        Timer progressTimer = new Timer();
-        progressTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDetailSongProgress.setProgress(mDetailSongProgress.getProgress() + PlayerService.SEEKER_INTERVAL);
-                    }
-                });
-            }
-        }, 0, PlayerService.SEEKER_INTERVAL);
     }
 
 }

@@ -132,6 +132,7 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onSongSelected(String song, String artist,String album) {
+        Picasso.with(NowPlayingActivity.this).load(playerService.getSelected_albumart()).into(circular_albumart);
         tv_currentsong.setText(Util.setSongDisplayTitle(Util.parseMusicFilename(song), artist), TextView.BufferType.SPANNABLE);
         super.onSongSelected(song, artist,album);
         sb_circle.setProgress(0);
