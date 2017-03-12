@@ -1,21 +1,52 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_playlist"
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/child_playlist_item" />
+        android:id="@+id/id_main_pager"/>
 
     <include
+        android:id="@+id/id_selected_song_view"
         layout="@layout/view_selected_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/id_selected_song_view"
         android:layout_gravity="bottom"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_margin="20dp"
+        app:layout_anchor="@id/id_main_pager"
+        android:src="@drawable/song_drawable"
+        app:backgroundTint="@color/colorbackground"
+        android:id="@+id/id_playerToggle"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:clickable="true">
+
+        <include
+            layout="@layout/playlisttoolbar"
+            android:id="@+id/playlist_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+
+        <!--<include-->
+            <!--android:id="@+id/id_platlist_songdetail"-->
+            <!--layout="@layout/view_selected_song_detail"-->
+            <!--android:visibility="gone" />-->
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>

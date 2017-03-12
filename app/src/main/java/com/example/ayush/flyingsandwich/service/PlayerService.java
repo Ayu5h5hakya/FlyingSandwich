@@ -3,6 +3,7 @@ package com.example.ayush.flyingsandwich.service;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -15,11 +16,12 @@ import java.io.IOException;
  * Created by Ayush on 2/28/2017.
  */
 
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener{
 
     private IBinder mBinder = new LocalBinder();
     private MediaPlayer mMediaPlayer;
-    private String selected_song, selected_artist;
+    private String selected_song, selected_artist,selected_album;
+    private Uri selected_albumart;
     private int position;
 
     public int getCurrentPosition() {
@@ -35,14 +37,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public static int SEEKER_INTERVAL = 1000;
     public boolean MEDIA_SHUFFLE_ON;
     public boolean MEDIA_REPEAT_ON;
-    public PlaybackChangeRequestListener playbackChangeRequestListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnPreparedListener(this);
-        mMediaPlayer.setOnCompletionListener(this);
     }
 
     @Nullable
@@ -61,12 +61,17 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return true;
     }
 
-    public void setSelection(String selected_song, String selected_artist) {
+    public void setSelection(String selected_song, String selected_artist,String selected_album,Uri selected_albumart) {
         this.selected_song = selected_song;
         this.selected_artist = selected_artist;
+        this.selected_album = selected_album;
+        this.selected_albumart = selected_albumart;
         playCurrentSelection();
     }
 
+    public Uri getSelected_albumart() {
+        return selected_albumart;
+    }
 
     private void playCurrentSelection() {
         if (mMediaPlayer.isPlaying()) {
@@ -90,17 +95,13 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return selected_artist;
     }
 
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        mMediaPlayer.start();
+    public String getSelected_album() {
+        return selected_album;
     }
 
     @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        if (MEDIA_REPEAT_ON) mMediaPlayer.setLooping(true);
-        else {
-            playbackChangeRequestListener.onPlaybackCompleted(position);
-        }
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mMediaPlayer.start();
     }
 
     public class LocalBinder extends Binder {

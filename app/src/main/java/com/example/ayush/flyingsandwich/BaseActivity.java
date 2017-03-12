@@ -1,29 +1,32 @@
 package com.example.ayush.flyingsandwich;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.ayush.flyingsandwich.Interface.PlaybackChangeRequestListener;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
+import com.example.ayush.flyingsandwich.Model.RealmEngine;
 import com.example.ayush.flyingsandwich.Provider.MusicDirectoryEngine;
 import com.example.ayush.flyingsandwich.service.PlayerService;
 
-import java.util.ArrayList;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
 /**
  * Created by Ayush on 2/28/2017.
  */
 
+@RuntimePermissions
 public abstract class BaseActivity extends AppCompatActivity implements PlaybackChangeRequestListener, SongSelectedListener {
 
     public static String TAG = "witcher";
@@ -39,10 +42,20 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
         musicDirectoryEngine = MusicDirectoryEngine.getInstance(this);
-        musicDirectoryEngine.storeAllFiles(realm);
+        realm = RealmEngine.getInstance(this);
+        BaseActivityPermissionsDispatcher.checkPermissionsWithCheck(this);
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    public void checkPermissions() {
+        musicDirectoryEngine.setupRealm(realm);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        BaseActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
     }
 
     @Override
@@ -79,26 +92,26 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
 
     @Override
     public void onSongSelected(String song, String artist) {
-        PlaylistItem result = realm.where(PlaylistItem.class)
-                .equalTo("song_name", song)
-                .equalTo("artist_name", artist)
-                .findFirst();
-        if (result != null) {
-            playerService.setSelection(result.getSong_name(), result.getArtist_name());
-        }
+//        SongItem result = realm.where(SongItem.class)
+//                .equalTo("song_name", song)
+//                .equalTo("artist_name", artist)
+//                .findFirst();
+//        if (result != null) {
+//            playerService.setSelection(result.getSong_name(), result.getArtist_name(),result.getAlbum_name(),result.getAlbumart_url());
+//        }
 
     }
 
-    protected ArrayList<PlaylistItem> getAllMusic() {
-        ArrayList<PlaylistItem> finalresults = new ArrayList<>();
-        RealmResults<PlaylistItem> results = realm.where(PlaylistItem.class).findAll();
-        for (PlaylistItem temp : results) {
-            finalresults.add(temp);
-        }
-        return finalresults;
-    }
+//    protected ArrayList<SongItem> getAllMusic() {
+//        ArrayList<SongItem> finalresults = new ArrayList<>();
+//        RealmResults<SongItem> results = realm.where(SongItem.class).findAll();
+//        for (SongItem temp : results) {
+//            finalresults.add(temp);
+//        }
+//        return finalresults;
+//    }
 
-    protected PlaylistItem getSongByPosition(int index) {
+    protected SongItem getSongByPosition(int index) {
         return musicDirectoryEngine.getSongByPosition(index);
     }
 }

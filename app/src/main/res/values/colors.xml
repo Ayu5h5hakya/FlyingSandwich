@@ -8,4 +8,5 @@
     <color name="colorselected">#AA3932</color>
     <color name="colorseeker">#EC4F46</color>
     <color name="colornpbtn">#98B1CF</color>
+    <color name="colortoolbaricon">#9F9F9F</color>
 </resources>

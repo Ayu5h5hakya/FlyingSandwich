@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/id_av_albums"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_below="@+id/id_av_albums"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_av_album"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        tools:text="Album name"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginRight="10dp"
+        tools:text="Artist name"
+        android:layout_below="@+id/id_av_albums"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textAllCaps="true"
+        android:id="@+id/id_av_artistname"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_av_artistname"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/id_av_emptyview"
+        android:gravity="center"
+        android:text="Please select a album"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_av_albumsongs"
+        android:layout_below="@+id/id_av_album"
+        android:visibility="gone">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

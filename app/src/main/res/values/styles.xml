@@ -8,10 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="NowPlayingTheme" parent="Theme.AppCompat">
+    <style name="FlyingSandwichTheme" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="AppTheme.RedAccent">
+        <item name="colorAccent">@color/colorselected</item>
     </style>
 
 </resources>

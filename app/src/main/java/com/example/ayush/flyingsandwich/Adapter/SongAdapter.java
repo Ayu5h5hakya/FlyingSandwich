@@ -2,13 +2,14 @@ package com.example.ayush.flyingsandwich.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
 import com.example.ayush.flyingsandwich.R;
 import com.example.ayush.flyingsandwich.Util;
 
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolder> {
 
     private final Context context;
-    private ArrayList<PlaylistItem> musicFiles;
+    private ArrayList<SongItem> musicFiles;
     private SongSelectedListener songSelectedListener;
     //private SparseBooleanArray selectedItems;
     private int selectedPosition = -1;
@@ -32,7 +33,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
     public void setSelectedPosition(int selectedPosition){this.selectedPosition = selectedPosition;}
 
-    public SongAdapter(Context context, ArrayList<PlaylistItem> musicFiles) {
+    public SongAdapter(Context context, ArrayList<SongItem> musicFiles) {
         this.context = context;
         this.musicFiles = musicFiles;
         //this.selectedItems = new SparseBooleanArray();
@@ -62,7 +63,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         return musicFiles.size();
     }
 
-    public class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnCreateContextMenuListener {
         TextView tv_selected_song, tv_selected_artist;
 
         public SongsViewHolder(View itemView) {
@@ -70,6 +72,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             tv_selected_song = (TextView) itemView.findViewById(R.id.id_selected_song);
             tv_selected_artist = (TextView) itemView.findViewById(R.id.id_selected_artist);
             itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         @Override
@@ -78,6 +81,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             notifyDataSetChanged();
             songSelectedListener.onSongSelected(musicFiles.get(selectedPosition).getSong_name(),
                     musicFiles.get(selectedPosition).getArtist_name());
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            contextMenu.add("Delete");
+            contextMenu.add("Go to Album");
+            contextMenu.add("Edit tags");
         }
     }
 }
