@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.example.ayush.flyingsandwich.service.PlayerService;
 import com.facebook.stetho.Stetho;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import io.realm.Realm;
 
@@ -20,23 +21,10 @@ public class FlyingSandwich extends Application {
         Intent intent = new Intent(this, PlayerService.class);
         startService(intent);
         Realm.init(this);
-        Stetho.InitializerBuilder initializerBuilder =
-                Stetho.newInitializerBuilder(this);
-
-// Enable Chrome DevTools
-        initializerBuilder.enableWebKitInspector(
-                Stetho.defaultInspectorModulesProvider(this)
-        );
-
-// Enable command line interface
-        initializerBuilder.enableDumpapp(
-                Stetho.defaultDumperPluginsProvider(this)
-        );
-
-// Use the InitializerBuilder to generate an Initializer
-        Stetho.Initializer initializer = initializerBuilder.build();
-
-// Initialize Stetho with the Initializer
-        Stetho.initialize(initializer);
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
     }
 }

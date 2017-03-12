@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
 import com.example.ayush.flyingsandwich.Provider.CircleTransform;
 import com.example.ayush.flyingsandwich.Provider.CircularSeekBar;
 import com.example.ayush.flyingsandwich.service.PlayerService;
@@ -96,14 +96,14 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
                 playerService.changeRepeatState();
                 break;
             case R.id.id_np_rewind:
-                PlaylistItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
+                SongItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
                 playerService.setCurrentPosition(playerService.getCurrentPosition() - 1);
-                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name(),prevItem.getAlbum_name());
+                onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
                 break;
             case R.id.id_np_next:
-                PlaylistItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
+                SongItem nextItem = getSongByPosition(playerService.getCurrentPosition() + 1);
                 playerService.setCurrentPosition(playerService.getCurrentPosition() + 1);
-                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name(),nextItem.getAlbum_name());
+                onSongSelected(nextItem.getSong_name(), nextItem.getArtist_name());
                 break;
             default:
                 break;
@@ -131,10 +131,10 @@ public class NowPlayingActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void onSongSelected(String song, String artist,String album) {
+    public void onSongSelected(String song, String artist) {
         Picasso.with(NowPlayingActivity.this).load(playerService.getSelected_albumart()).into(circular_albumart);
         tv_currentsong.setText(Util.setSongDisplayTitle(Util.parseMusicFilename(song), artist), TextView.BufferType.SPANNABLE);
-        super.onSongSelected(song, artist,album);
+        super.onSongSelected(song, artist);
         sb_circle.setProgress(0);
         sb_circle.setMax(playerService.getCurrentTrackMaxDuration());
     }

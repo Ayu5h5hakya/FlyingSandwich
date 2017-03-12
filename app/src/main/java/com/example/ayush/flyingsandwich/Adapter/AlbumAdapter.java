@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.ayush.flyingsandwich.Interface.AlbumSelectedListener;
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.AlbumItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
 import com.example.ayush.flyingsandwich.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,10 +23,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
 
     private final Context mcontext;
-    private final ArrayList<PlaylistItem> albumfiles;
+    private final ArrayList<AlbumItem> albumfiles;
     private AlbumSelectedListener albumSelectedListener;
 
-    public AlbumAdapter(Context mcontext, ArrayList<PlaylistItem> albumfiles) {
+    public AlbumAdapter(Context mcontext, ArrayList<AlbumItem> albumfiles) {
         this.mcontext = mcontext;
         this.albumfiles = albumfiles;
     }
@@ -38,7 +39,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     @Override
     public void onBindViewHolder(AlbumViewHolder holder, int position) {
-        Picasso.with(mcontext).load(albumfiles.get(position).getAlbumart_url()).into(holder.malbumart);
+        Picasso.with(mcontext).load(albumfiles.get(position).getAlbumart()).into(holder.malbumart);
     }
 
     @Override
@@ -62,6 +63,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
         @Override
         public void onClick(View view) {
+            albumSelectedListener.onAlbumSelected(albumfiles.get(getAdapterPosition()).getmAlbumId());
         }
     }
 }

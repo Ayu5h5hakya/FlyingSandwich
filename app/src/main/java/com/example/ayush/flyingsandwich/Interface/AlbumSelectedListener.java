@@ -5,5 +5,5 @@ package com.example.ayush.flyingsandwich.Interface;
  */
 
 public interface AlbumSelectedListener {
-    void onAlbumSelected(String artist,String album);
+    void onAlbumSelected(Long albumId);
 }

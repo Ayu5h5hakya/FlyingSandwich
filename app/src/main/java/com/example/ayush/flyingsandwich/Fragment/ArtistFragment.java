@@ -7,10 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
 import com.example.ayush.flyingsandwich.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by Ayush on 3/8/2017.
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 
 public class ArtistFragment extends Fragment{
 
-    public static ArtistFragment getInstance(ArrayList<PlaylistItem> albumitems) {
+    public static ArtistFragment getInstance() {
         return new ArtistFragment();
     }
 

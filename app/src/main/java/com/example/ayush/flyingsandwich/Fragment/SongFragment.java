@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 
 import com.example.ayush.flyingsandwich.Adapter.SongAdapter;
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
+import com.example.ayush.flyingsandwich.Model.RealmEngine;
 import com.example.ayush.flyingsandwich.R;
 
 import java.util.ArrayList;
@@ -20,16 +21,15 @@ import java.util.ArrayList;
  * Created by Ayush on 3/7/2017.
  */
 
-public class SongFragment extends Fragment {
+public class SongFragment extends Fragment implements SongSelectedListener{
 
-    private static final String ARGUMENT_PLAYLIST = "Playlist";
     private RecyclerView mSongRecycler;
-    ArrayList<PlaylistItem> songsList = new ArrayList<>();
+    private SongAdapter mSongAdapter;
+    ArrayList<SongItem> songsList = new ArrayList<>();
 
-    public static SongFragment getInstance(ArrayList<PlaylistItem> playlistItems) {
+    public static SongFragment getInstance() {
         SongFragment songFragment = new SongFragment();
         Bundle fragArgs = new Bundle();
-        fragArgs.putParcelableArrayList(ARGUMENT_PLAYLIST,playlistItems);
         songFragment.setArguments(fragArgs);
         return songFragment;
     }
@@ -45,16 +45,20 @@ public class SongFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songsList = getArguments().getParcelableArrayList(ARGUMENT_PLAYLIST);
+        songsList = RealmEngine.getAllMusic();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mSongRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SongAdapter songAdapter = new SongAdapter(getActivity(),songsList);
-        songAdapter.setSongClickListener((SongSelectedListener) getActivity());
-        mSongRecycler.setAdapter(songAdapter);
+        mSongAdapter = new SongAdapter(getActivity(), songsList);
+        mSongAdapter.setSongClickListener(this);
+        mSongRecycler.setAdapter(mSongAdapter);
     }
 
+    @Override
+    public void onSongSelected(String song, String artist) {
+        mSongAdapter.notifyDataSetChanged();
+    }
 }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ayush.flyingsandwich.Interface.SongSelectedListener;
-import com.example.ayush.flyingsandwich.Model.PlaylistItem;
+import com.example.ayush.flyingsandwich.Model.SongItem;
 import com.example.ayush.flyingsandwich.R;
 import com.example.ayush.flyingsandwich.Util;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolder> {
 
     private final Context context;
-    private ArrayList<PlaylistItem> musicFiles;
+    private ArrayList<SongItem> musicFiles;
     private SongSelectedListener songSelectedListener;
     //private SparseBooleanArray selectedItems;
     private int selectedPosition = -1;
@@ -33,7 +33,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
     public void setSelectedPosition(int selectedPosition){this.selectedPosition = selectedPosition;}
 
-    public SongAdapter(Context context, ArrayList<PlaylistItem> musicFiles) {
+    public SongAdapter(Context context, ArrayList<SongItem> musicFiles) {
         this.context = context;
         this.musicFiles = musicFiles;
         //this.selectedItems = new SparseBooleanArray();
@@ -80,7 +80,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             selectedPosition = getAdapterPosition();
             notifyDataSetChanged();
             songSelectedListener.onSongSelected(musicFiles.get(selectedPosition).getSong_name(),
-                    musicFiles.get(selectedPosition).getArtist_name(),musicFiles.get(selectedPosition).getAlbum_name());
+                    musicFiles.get(selectedPosition).getArtist_name());
         }
 
         @Override

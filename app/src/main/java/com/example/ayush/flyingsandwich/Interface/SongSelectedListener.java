@@ -5,5 +5,5 @@ package com.example.ayush.flyingsandwich.Interface;
  */
 
 public interface SongSelectedListener {
-    void onSongSelected(String song, String artist,String album);
+    void onSongSelected(String song, String artist);
 }
