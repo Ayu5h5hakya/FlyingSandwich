@@ -14,6 +14,8 @@ import com.example.ayush.flyingsandwich.Adapter.SongAdapter;
 import com.example.ayush.flyingsandwich.Model.SongItem;
 import com.example.ayush.flyingsandwich.service.PlayerService;
 
+import permissions.dispatcher.RuntimePermissions;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
@@ -32,6 +34,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         setupListeners();
     }
+
+
 
     private void setupListeners() {
         view_selected_song.setOnClickListener(this);
@@ -100,12 +104,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 SongItem prevItem = getSongByPosition(playerService.getCurrentPosition() - 1);
                 mSongAdapter.setSelectedPosition(playerService.getCurrentPosition() - 1);
                 onSongSelected(prevItem.getSong_name(), prevItem.getArtist_name());
-                break;
-            case R.id.id_pl_album:
-                break;
-            case R.id.id_pl_artist:
-                break;
-            case R.id.id_pl_song:
                 break;
             case R.id.id_child_pl_menu:
 

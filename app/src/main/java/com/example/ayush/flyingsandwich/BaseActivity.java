@@ -1,11 +1,13 @@
 package com.example.ayush.flyingsandwich;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,11 +19,14 @@ import com.example.ayush.flyingsandwich.Provider.MusicDirectoryEngine;
 import com.example.ayush.flyingsandwich.service.PlayerService;
 
 import io.realm.Realm;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
 /**
  * Created by Ayush on 2/28/2017.
  */
 
+@RuntimePermissions
 public abstract class BaseActivity extends AppCompatActivity implements PlaybackChangeRequestListener, SongSelectedListener {
 
     public static String TAG = "witcher";
@@ -39,7 +44,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Playback
         super.onCreate(savedInstanceState);
         musicDirectoryEngine = MusicDirectoryEngine.getInstance(this);
         realm = RealmEngine.getInstance(this);
+        BaseActivityPermissionsDispatcher.checkPermissionsWithCheck(this);
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    public void checkPermissions() {
         musicDirectoryEngine.setupRealm(realm);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        BaseActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
     }
 
     @Override

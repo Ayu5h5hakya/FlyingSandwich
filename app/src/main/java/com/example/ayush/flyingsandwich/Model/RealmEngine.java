@@ -50,5 +50,12 @@ public class RealmEngine {
         return realm.where(Album.class).equalTo("mAlbumId",albumId).findFirst().getmName();
     }
 
+    public static ArrayList<ArtistItem> getAllArtists(){
+        ArrayList<ArtistItem> results = new ArrayList<>();
+        for (Artist item : realm.where(Artist.class).findAll()){
+            results.add(new ArtistItem(item.getmName()));
+        }
+        return results;
+    }
 
 }

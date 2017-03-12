@@ -86,6 +86,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             contextMenu.add("Delete");
+            contextMenu.add("Go to Album");
+            contextMenu.add("Edit tags");
         }
     }
 }
